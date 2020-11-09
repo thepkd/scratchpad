@@ -1,6 +1,6 @@
-import heapq
 
 #%%
+import heapq
 hq = []
 for i in range(0,10):
     heapq.heappush(hq,i)
