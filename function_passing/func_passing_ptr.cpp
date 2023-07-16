@@ -1,4 +1,4 @@
-#include "func_passing_templates.h"
+#include "func_passing_ptr.h"
 
 
 int main(){
