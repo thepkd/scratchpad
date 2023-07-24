@@ -6,6 +6,6 @@ class Test{
         int mutable m_debugCount;
     public:
     Test(int x, int y);
-    int GetX() const { return x;}
+    int GetX() const { m_debugCount++; return x;}
     void SetX(int X) { x= X;}
 };
