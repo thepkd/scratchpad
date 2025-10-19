@@ -28,6 +28,8 @@ val_pos PLRU::PLRUVictim(){
     for ( auto val : pos_path){
         std::cout << val;
     }
+
+    printState();
     std::cout << std::endl;
 
     return {val_path, pos_path};
@@ -45,13 +47,66 @@ void PLRU::markMRU( std::vector<int> pos_path){
     }
 }
 
+void PLRU::printState(){
+    int endl = 0;
+    std::cout << "PLRU State: " << std::endl;
+    for(int i=0; i< m_size -1; i++){
+        std::cout << ((state & (1U << i)) >> i);
+        if( i == endl){
+            std::cout << std::endl;
+            endl = 2 * (endl +1);
+        }
+    }
+    std::cout << std::endl;
+}
+
+std::vector<int> PLRU::GetPathVector(int way) {
+    int nextPos = 0;
+    std::vector<int> path;
+    for(int pathIndex=0; pathIndex < path_bits; pathIndex++) {
+        path.push_back(nextPos);
+        nextPos = nextPos * 2 + 1 + ((way & (1U << ( path_bits - pathIndex - 1))) >> (path_bits - pathIndex - 1));
+    }
+    return path;
+}
 
 int main() {
-    PLRU obj(32);
+    PLRU obj(4);
 
-    auto victim = obj.PLRUVictim();
-    obj.markMRU( victim.pos_path);
+    //Miss 0 and Miss 1
+    auto victim0= obj.PLRUVictim();
+    obj.markMRU( victim0.pos_path);
     auto victim1 = obj.PLRUVictim();
+    obj.markMRU( victim1.pos_path);
+
+    // Hit 0 and Hit 1
+    auto cacheHit1 = obj.GetPathVector(0);
+    obj.markMRU( cacheHit1);
+
+    //auto cacheHit2 = obj.GetPathVector(10);
+    //obj.markMRU( cacheHit2);
+
+    // More Misses
+    auto victim2 = obj.PLRUVictim();
+    obj.markMRU( victim2.pos_path);
+    auto victim3 = obj.PLRUVictim();
+    obj.markMRU( victim3.pos_path);
+    auto victim4 = obj.PLRUVictim();
+    obj.markMRU( victim4.pos_path);
+
+
+
+    //std::cout << "---- Testing GetPathVector ----" << std::endl;
+    //for(int way =0; way <32; way++) {
+    //    std::cout << "Way: " << way << " Path: ";
+    //    auto path = obj.GetPathVector(way);
+    //    for(auto p : path) {
+    //        std::cout << p << " ";
+    //    }
+    //    std::cout << std::endl;
+    //}
+
+
     return 0;
 }
 
