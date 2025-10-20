@@ -14,7 +14,8 @@ class PLRU{
     public:
         PLRU(int size);
         ~PLRU() = default;
-        void markMRU(std::vector<int> pos_path);
+        void markMRU(std::vector<int> pos_path, int way);
+        void updatePLRU( std::vector<int> pos_path);
         val_pos PLRUVictim(); 
         void printState();
         std::vector<int> GetPathVector(int way);
@@ -23,4 +24,5 @@ class PLRU{
 struct val_pos{
     std::vector<int> val_path;
     std::vector<int> pos_path;
+    int way;
 };
